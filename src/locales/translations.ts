@@ -45,6 +45,7 @@ export const translations = {
     processedSize: 'İşlenmiş Boyut',
     sizeReduction: 'Boyut Azaltma',
     processingTime: 'İşlem Süresi',
+    padding: 'Kesme Payı',
   },
   en: {
     title: 'USWG Web',
@@ -92,5 +93,6 @@ export const translations = {
     processedSize: 'Processed Size',
     sizeReduction: 'Size Reduction',
     processingTime: 'Processing Time',
+    padding: 'Cut Padding',
   }
 } as const; 
