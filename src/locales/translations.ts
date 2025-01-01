@@ -1,6 +1,6 @@
 export const translations = {
   tr: {
-    title: 'USWG Web',
+    title: 'Klyppr',
     selectVideo: 'Video Seç',
     noPreview: 'Önizleme yok',
     noVideoSelected: 'Video seçilmedi',
@@ -48,7 +48,7 @@ export const translations = {
     padding: 'Kesme Payı',
   },
   en: {
-    title: 'USWG Web',
+    title: 'Klyppr',
     selectVideo: 'Select Video',
     noPreview: 'No preview',
     noVideoSelected: 'No video selected',

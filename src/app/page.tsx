@@ -525,11 +525,14 @@ export default function Home() {
       <div className="p-4 sm:p-6 md:p-8">
         <div className="max-w-6xl mx-auto space-y-6">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center flex items-center justify-center gap-3 px-4 pt-2">
-            <img
-              src="/favicon.ico"
-              alt="USWG Logo"
-              className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg shadow-lg"
-            />
+            {/* <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 relative group">
+              <img
+                src="/logo.png"
+                alt="Klyppr Logo"
+                className="w-full h-full object-contain"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/5 to-purple-400/5 rounded-lg group-hover:from-blue-400/10 group-hover:to-purple-400/10 transition-all duration-300"></div>
+            </div> */}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
               {t.title}
             </span>
