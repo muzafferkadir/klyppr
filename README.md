@@ -1,4 +1,4 @@
-# USWG Web
+# klyppr
 
 A web-based tool for detecting and trimming silent parts in videos using FFmpeg.js.
 
