@@ -5,6 +5,51 @@ import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { toBlobURL, fetchFile } from '@ffmpeg/util';
 import { translations } from '@/locales/translations';
 
+const DesktopAppAnnouncement = ({ lang }: { lang: 'tr' | 'en' }) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <p className="text-sm leading-6 text-white">
+          <strong className="font-semibold">
+            {lang === 'tr' ? '🎉 Yeni! Klyppr Masaüstü Uygulaması - 15x Daha Hızlı!' : '🎉 New! Klyppr Desktop App - 15x Faster!'}
+          </strong>
+          <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
+          <span className="font-medium">
+            {lang === 'tr' ? 'Ücretsiz & Sınırsız!' : 'Free & Unlimited!'}
+          </span>
+          <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
+          {lang === 'tr' ? 'Şimdi indirin:' : 'Download now:'}
+          <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-1.0.0-arm64.dmg" className="ml-2 font-medium text-white underline hover:text-gray-200">Mac</a>
+          <span className="mx-1 text-white">|</span>
+          <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-Portable-x64.1.exe" className="font-medium text-white underline hover:text-gray-200">Windows</a>
+        </p>
+        <a
+          href="https://github.com/muzafferkadir/klyppr-desktop"
+          className="flex-none rounded-full bg-white/10 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors"
+        >
+          GitHub <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+      <div className="flex flex-1 justify-end">
+        <button
+          type="button"
+          className="-m-3 p-3 focus-visible:outline-offset-[-4px] text-white hover:text-gray-200"
+          onClick={() => setIsVisible(false)}
+        >
+          <span className="sr-only">Dismiss</span>
+          <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   const [video, setVideo] = useState<File | null>(null);
   const [silentSegments, setSilentSegments] = useState<{ start: number; end: number }[]>([]);
@@ -502,6 +547,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100">
+      <DesktopAppAnnouncement lang={lang} />
       {/* Language Selector */}
       <div className="absolute top-2 right-2 z-50 flex flex-row items-center gap-1">
         <button
@@ -525,16 +571,8 @@ export default function Home() {
       <div className="p-4 sm:p-6 md:p-8">
         <div className="max-w-6xl mx-auto space-y-6">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center flex items-center justify-center gap-3 px-4 pt-2">
-            {/* <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 relative group">
-              <img
-                src="/logo.png"
-                alt="Klyppr Logo"
-                className="w-full h-full object-contain"
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/5 to-purple-400/5 rounded-lg group-hover:from-blue-400/10 group-hover:to-purple-400/10 transition-all duration-300"></div>
-            </div> */}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-              {t.title}
+              Klyppr - Automatic Video Silence Clipper
             </span>
           </h1>
 
