@@ -11,37 +11,39 @@ const DesktopAppAnnouncement = ({ lang }: { lang: 'tr' | 'en' }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <p className="text-sm leading-6 text-white">
+    <div className="relative isolate flex items-center gap-x-2 sm:gap-x-6 overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 px-3 py-2 sm:px-6 sm:py-2.5 text-[11px] sm:text-sm sm:before:flex-1 sm:after:flex-1">
+      <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-1 sm:gap-y-2">
+        <p className="text-white">
           <strong className="font-semibold">
-            {lang === 'tr' ? '🎉 Yeni! Klyppr Masaüstü Uygulaması - 15x Daha Hızlı!' : '🎉 New! Klyppr Desktop App - 15x Faster!'}
+            {lang === 'tr' ? '🎉 Yeni! Klyppr Masaüstü Uygulaması' : '🎉 New! Klyppr Desktop App'}
+            <span className="hidden sm:inline"> - 15x {lang === 'tr' ? 'Daha Hızlı' : 'Faster'}</span>
           </strong>
-          <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
+          <svg viewBox="0 0 2 2" className="mx-1 sm:mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
           <span className="font-medium">
-            {lang === 'tr' ? 'Ücretsiz & Sınırsız!' : 'Free & Unlimited!'}
+            {lang === 'tr' ? 'Ücretsiz' : 'Free'}
+            <span className="hidden sm:inline"> & {lang === 'tr' ? 'Sınırsız' : 'Unlimited'}</span>!
           </span>
-          <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
-          {lang === 'tr' ? 'Şimdi indirin:' : 'Download now:'}
-          <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-1.0.0-arm64.dmg" className="ml-2 font-medium text-white underline hover:text-gray-200">Mac</a>
+          <svg viewBox="0 0 2 2" className="mx-1 sm:mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
+          <span className="hidden sm:inline">{lang === 'tr' ? 'Şimdi indirin:' : 'Download now: '}</span>
+          <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-1.0.0-arm64.dmg" className="font-medium text-white underline hover:text-gray-200">Mac</a>
           <span className="mx-1 text-white">|</span>
           <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-Portable-x64.1.exe" className="font-medium text-white underline hover:text-gray-200">Windows</a>
         </p>
         <a
           href="https://github.com/muzafferkadir/klyppr-desktop"
-          className="flex-none rounded-full bg-white/10 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors"
+          className="flex-none rounded-full bg-white/10 px-2 sm:px-3.5 py-1 text-[11px] sm:text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors whitespace-nowrap"
         >
           GitHub <span aria-hidden="true">&rarr;</span>
         </a>
       </div>
-      <div className="flex flex-1 justify-end">
+      <div className="flex flex-1 justify-end sm:flex-initial">
         <button
           type="button"
-          className="-m-3 p-3 focus-visible:outline-offset-[-4px] text-white hover:text-gray-200"
+          className="-m-1.5 sm:-m-3 p-1.5 sm:p-3 focus-visible:outline-offset-[-4px] text-white hover:text-gray-200"
           onClick={() => setIsVisible(false)}
         >
           <span className="sr-only">Dismiss</span>
-          <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <svg className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
@@ -104,6 +106,14 @@ export default function Home() {
 
         // Log handler
         ffmpeg.on('log', ({ message }) => {
+          if (message.includes('Aborted()')) {
+            setLogs(prev => [...prev, lang === 'tr' ? 
+              '⚠️ Web sürümünde performans sorunu tespit edildi. Daha iyi performans için masaüstü uygulamasını kullanmanızı öneririz.' :
+              '⚠️ Performance issue detected in web version. We recommend using the desktop app for better performance.'
+            ]);
+            return;
+          }
+          
           if (isDetectingRef.current && message.includes('silence_')) {
             silenceLogsRef.current.push(message);
             console.log('Silence detection:', message);
@@ -252,16 +262,32 @@ export default function Home() {
       isDetectingRef.current = true;
       
       const ffmpeg = ffmpegRef.current;
-      
-      await ffmpeg.writeFile('input.mp4', await fetchFile(video));
-      setLogs(prev => [...prev, t.videoLoaded]);
 
-      await ffmpeg.exec([
+      // Clear any existing files
+      try {
+        await ffmpeg.deleteFile('input.mp4');
+      } catch (e) {
+        // Ignore if file doesn't exist
+      }
+      
+      // Write input file with error handling
+      try {
+        await ffmpeg.writeFile('input.mp4', await fetchFile(video));
+        setLogs(prev => [...prev, t.videoLoaded]);
+      } catch (error) {
+        throw new Error('Failed to load video file');
+      }
+
+      // Only disable video processing since we only need audio for silence detection
+      const ffmpegCommand = [
         '-i', 'input.mp4',
+        '-vn',  // Disable video processing since we only need audio
         '-af', `silencedetect=n=${threshold}dB:d=${minDuration}`,
         '-f', 'null',
         '-'
-      ]);
+      ];
+
+      await ffmpeg.exec(ffmpegCommand);
 
       // Parse silence detection from collected logs
       const logStr = silenceLogsRef.current.join('\n');
@@ -289,11 +315,19 @@ export default function Home() {
       }
 
       // Clean up
-      await ffmpeg.deleteFile('input.mp4');
+      try {
+        await ffmpeg.deleteFile('input.mp4');
+      } catch (e) {
+        // Ignore cleanup errors
+      }
     } catch (err) {
       const error = err as Error;
       console.error('Sessiz kısım tespiti hatası:', error);
-      setLogs(prev => [...prev, `Hata: ${error.message}`]);
+      setLogs(prev => [...prev, `Hata: ${error.message}`, 
+        lang === 'tr' ? 
+        '💡 İpucu: Daha iyi performans için masaüstü uygulamasını kullanın.' :
+        '💡 Tip: Use the desktop app for better performance.'
+      ]);
     } finally {
       const endTime = performance.now();
       const detectionTime = (endTime - startTime) / 1000; // Convert to seconds
@@ -401,16 +435,18 @@ export default function Home() {
 
       setLogs(prev => [...prev, 'Kırpma işlemi başladı...']);
 
-      // Process the video with optimized settings
+      // Process the video with high quality and ultrafast preset
       await ffmpeg.exec([
-        '-threads', '0',           // Use all available CPU threads
         '-i', 'input.mp4',
         '-filter_complex', filterComplex,
         '-map', '[vout]',
         '-map', '[aout]',
-        '-preset', 'ultrafast',    // Use fastest encoding preset
-        '-crf', '28',             // Lower quality for faster encoding
-        '-tune', 'fastdecode',    // Optimize for fast decoding
+        '-c:v', 'libx264',     // Use H.264 codec
+        '-preset', 'ultrafast', // Fastest processing
+        '-crf', '17',          // Very high quality (0-51, lower is better)
+        '-tune', 'film',       // Optimize for high quality video content
+        '-c:a', 'aac',         // Use AAC codec for audio
+        '-b:a', '192k',        // High quality audio bitrate
         '-movflags', '+faststart', // Enable fast start for web playback
         'output.mp4'
       ]);
@@ -439,13 +475,6 @@ export default function Home() {
       setProcessingTimes(prev => ({ ...prev, trimming: trimmingTime }));
       
       setLogs(prev => [...prev, `${t.completed} ${t.totalProcessingTime}: ${(processingTimes.detection + trimmingTime).toFixed(1)}s`]);
-
-      // Update progress tracking using the progress event
-      ffmpeg.on('progress', ({ progress }) => {
-        const currentProgress = progress * 100;
-        setProgress(currentProgress);
-        updateEstimatedTime(currentProgress);
-      });
 
       // After processing, update processed size
       setSystemMetrics(prev => ({
@@ -552,19 +581,21 @@ export default function Home() {
       <div className="absolute top-2 right-2 z-50 flex flex-row items-center gap-1">
         <button
           onClick={() => setLang('tr')}
-          className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all transform hover:scale-110 ${
+          className={`w-8 h-8 flex items-center justify-center rounded-full transition-all transform hover:scale-110 ${
             lang === 'tr' ? 'bg-blue-600 text-white ring-2 ring-blue-400 shadow-lg' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
+          title="Türkçe"
         >
-          🇹🇷
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ed4c5c"/><g fill="#fff"><path d="m41.3 39l.1-5.4L36 32l5.4-1.6l-.1-5.4l3.3 4.3l5.4-1.6l-3.3 4.3l3.3 4.3l-5.4-1.6z"/><path d="M33.2 44c-6.6 0-11.9-5.4-11.9-12s5.3-12 11.9-12c2.5 0 4.8.8 6.8 2.1C37.3 19 33.3 17 28.8 17C20.6 17 14 23.7 14 32s6.6 15 14.8 15c4.5 0 8.5-2 11.2-5.1c-1.9 1.3-4.2 2.1-6.8 2.1"/></g></svg>
         </button>
         <button
           onClick={() => setLang('en')}
-          className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all transform hover:scale-110 ${
+          className={`w-8 h-8 flex items-center justify-center rounded-full transition-all transform hover:scale-110 ${
             lang === 'en' ? 'bg-blue-600 text-white ring-2 ring-blue-400 shadow-lg' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
+          title="English"
         >
-          🇬🇧
+          <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><mask id="circleFlagsGb0"><circle cx="256" cy="256" r="256" fill="#fff"/></mask><g mask="url(#circleFlagsGb0)"><path fill="#eee" d="m0 0l8 22l-8 23v23l32 54l-32 54v32l32 48l-32 48v32l32 54l-32 54v68l22-8l23 8h23l54-32l54 32h32l48-32l48 32h32l54-32l54 32h68l-8-22l8-23v-23l-32-54l32-54v-32l-32-48l32-48v-32l-32-54l32-54V0l-22 8l-23-8h-23l-54 32l-54-32h-32l-48 32l-48-32h-32l-54 32L68 0z"/><path fill="#0052b4" d="M336 0v108L444 0Zm176 68L404 176h108zM0 176h108L0 68ZM68 0l108 108V0Zm108 512V404L68 512ZM0 444l108-108H0Zm512-108H404l108 108Zm-68 176L336 404v108z"/><path fill="#d80027" d="M0 0v45l131 131h45zm208 0v208H0v96h208v208h96V304h208v-96H304V0zm259 0L336 131v45L512 0zM176 336L0 512h45l131-131zm160 0l176 176v-45L381 336z"/></g></svg>
         </button>
       </div>
 
