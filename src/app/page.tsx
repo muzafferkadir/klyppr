@@ -27,7 +27,7 @@ const DesktopAppAnnouncement = ({ lang }: { lang: 'tr' | 'en' }) => {
           <span className="hidden sm:inline">{lang === 'tr' ? 'Şimdi indirin:' : 'Download now: '}</span>
           <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-1.0.0-arm64.dmg" className="font-medium text-white underline hover:text-gray-200">Mac</a>
           <span className="mx-1 text-white">|</span>
-          <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-Portable-x64.1.exe" className="font-medium text-white underline hover:text-gray-200">Windows</a>
+          <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-Portable-x64.exe" className="font-medium text-white underline hover:text-gray-200">Windows</a>
         </p>
         <a
           href="https://github.com/muzafferkadir/klyppr-desktop"
