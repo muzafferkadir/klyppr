@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Klyppr - Automatic Video Silence Clipper</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Klyppr - Video Silence Editor</h1>
+        
+        <div class="form-group">
+            <label>Input Video:</label>
+            <div class="input-group">
+                <input type="text" id="inputPath" readonly placeholder="Select video file...">
+                <button class="browse-btn" onclick="selectInput()">Browse</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Output Folder:</label>
+            <div class="input-group">
+                <input type="text" id="outputPath" readonly placeholder="Select output folder...">
+                <button class="browse-btn" onclick="selectOutput()">Browse</button>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="preset-btn active" data-preset="recommended">Önerilen</button>
+            <button class="preset-btn" data-preset="fast">Ekstra Hızlı</button>
+            <button class="preset-btn" data-preset="custom">Özel</button>
+        </div>
+
+        <div id="customSettings" class="settings-group">
+            <div class="form-group">
+                <label>Silence Threshold (dB):</label>
+                <input type="number" id="silenceDb" value="-45" step="1">
+            </div>
+
+            <div class="form-group">
+                <label>Minimum Silence Duration (seconds):</label>
+                <input type="number" id="minSilenceDuration" value="0.6" step="0.1" min="0">
+            </div>
+
+            <div class="form-group">
+                <label>Padding Duration (seconds):</label>
+                <input type="number" id="paddingDuration" value="0.05" step="0.01" min="0">
+            </div>
+        </div>
+
+        <button id="startBtn" onclick="startProcessing()" disabled>Start Processing</button>
+
+        <div id="progress">
+            <div>Processing status: <span id="status">Preparing...</span></div>
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        
+        // Preset değerleri
+        const presets = {
+            recommended: {
+                silenceDb: -45,
+                minSilenceDuration: 0.6,
+                paddingDuration: 0.05
+            },
+            fast: {
+                silenceDb: -30,
+                minSilenceDuration: 0.3,
+                paddingDuration: 0.02
+            }
+        };
+
+        // Preset butonları için olay dinleyicileri
+        document.querySelectorAll('.preset-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Aktif butonu değiştir
+                document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const preset = button.dataset.preset;
+                const customSettings = document.getElementById('customSettings');
+
+                // Özel ayarları göster/gizle
+                if (preset === 'custom') {
+                    customSettings.classList.add('visible');
+                } else {
+                    customSettings.classList.remove('visible');
+                    // Preset değerlerini ayarla
+                    const values = presets[preset];
+                    document.getElementById('silenceDb').value = values.silenceDb;
+                    document.getElementById('minSilenceDuration').value = values.minSilenceDuration;
+                    document.getElementById('paddingDuration').value = values.paddingDuration;
+                }
+            });
+        });
+
+        function selectInput() {
+            ipcRenderer.send('select-input');
+        }
+
+        function selectOutput() {
+            ipcRenderer.send('select-output');
+        }
+
+        function startProcessing() {
+            const params = {
+                inputPath: document.getElementById('inputPath').value,
+                outputPath: document.getElementById('outputPath').value,
+                silenceDb: document.getElementById('silenceDb').value,
+                minSilenceDuration: document.getElementById('minSilenceDuration').value,
+                paddingDuration: document.getElementById('paddingDuration').value
+            };
+
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('progress').style.display = 'block';
+            document.getElementById('log').style.display = 'block';
+            document.getElementById('status').textContent = 'Starting process...';
+
+            // Progress bar'ı sıfırla
+            document.getElementById('progressBar').style.width = '0%';
+
+            ipcRenderer.send('start-processing', params);
+        }
+
+        ipcRenderer.on('input-selected', (event, path) => {
+            document.getElementById('inputPath').value = path;
+            updateStartButton();
+        });
+
+        ipcRenderer.on('output-selected', (event, path) => {
+            document.getElementById('outputPath').value = path;
+            updateStartButton();
+        });
+
+        ipcRenderer.on('progress', (event, data) => {
+            document.getElementById('status').textContent = data.status;
+            document.getElementById('progressBar').style.width = `${data.percent}%`;
+        });
+
+        ipcRenderer.on('log', (event, message) => {
+            const log = document.getElementById('log');
+            log.innerHTML += message + '<br>';
+            log.scrollTop = log.scrollHeight;
+        });
+
+        ipcRenderer.on('completed', (event, success) => {
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('status').textContent = success ? 'Process completed!' : 'Error occurred!';
+            if (success) {
+                // İşlem tamamlandığında progress bar'ı %100'e tamamla
+                document.getElementById('progressBar').style.width = '100%';
+                // 1 saniye sonra progress'i gizle
+                setTimeout(() => {
+                    document.getElementById('progress').style.display = 'none';
+                    document.getElementById('progressBar').style.width = '0%';
+                }, 1000);
+            }
+        });
+
+        function updateStartButton() {
+            const inputPath = document.getElementById('inputPath').value;
+            const outputPath = document.getElementById('outputPath').value;
+            document.getElementById('startBtn').disabled = !(inputPath && outputPath);
+        }
+
+        // Başlangıçta özel ayarları gizle
+        document.getElementById('customSettings').classList.remove('visible');
+    </script>
+</body>
+</html> 

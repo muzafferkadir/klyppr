@@ -1,65 +1,86 @@
-# klyppr
+# Klyppr Desktop
 
-A web-based tool for detecting and trimming silent parts in videos using FFmpeg.
-
-## 🎉 Desktop App Now Available!
-
-The desktop version of Klyppr is now available with 15x faster processing! Download it for free:
-
--  [Windows](https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-Portable-x64.exe)
--  [Mac](https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-1.0.0-arm64.dmg)
-- 📦 [Source Code](https://github.com/muzafferkadir/klyppr-desktop)
-
-The desktop version offers:
-- ⚡ 15x faster processing
-- 💻 Native performance
-- 🆓 Free & unlimited use
-- 🎯 Easy-to-use interface
+This is the desktop version of [Klyppr](https://github.com/muzafferkadir/klyppr), a tool for editing video silence.
 
 ## Features
 
-- 🎥 Video upload and preview
-- 🔍 Silence detection with adjustable threshold
-- ✂️ Automatic silence trimming
-- 📊 Visual timeline of silent segments
-- 🌐 Multi-language support (English/Turkish)
-- 🎨 Modern dark theme UI
-- 📱 Responsive design
+- Detect and remove silent parts from videos
+- Adjustable silence threshold (dB)
+- Configurable minimum silence duration
+- Padding duration control for smooth transitions
+- User-friendly desktop interface
+- Supports multiple video formats (mp4, avi, mov, mkv)
 
-## Tech Stack
+## Installation
 
-- Next.js 14
-- TypeScript
-- Tailwind CSS
-- FFmpeg.js
-- WebAssembly
+1. Download the latest release for your operating system
+2. Install the application
+3. Launch Klyppr Desktop
 
-## Getting Started
+## Development Setup
 
 1. Clone the repository
 2. Install dependencies:
    ```bash
    npm install
    ```
-3. Run the development server:
+3. Set up FFmpeg binaries:
+   - Create the following directory structure:
+     ```
+     bin/
+     ├── mac/
+     │   ├── ffmpeg
+     │   └── ffprobe
+     └── win/
+         ├── ffmpeg.exe
+         └── ffprobe.exe
+     ```
+   - Download FFmpeg binaries and Place the binaries in their respective directories as shown above
+4. Run the development server:
    ```bash
-   npm run dev
+   npm run start
    ```
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Building
+
+Build for specific platforms:
+
+```bash
+# For macOS
+npm run build:mac
+
+# For Windows 64-bit
+npm run build:win64
+
+# For Windows 32-bit
+npm run build:win32
+```
+
+The built applications will be available in the `dist` directory.
 
 ## Usage
 
-1. Click "Select Video" to upload a video file
-2. Adjust audio threshold and minimum silence duration if needed
-3. Click "Detect Silent Parts" to analyze the video
-4. Review detected silent segments in the timeline
-5. Click "Trim Silent Parts" to process the video
-6. Download the processed video without silent parts
+1. Click "Browse" to select your input video file
+2. Choose an output folder for the processed video
+3. Adjust the settings (optional):
+   - Silence Threshold (dB): Default -45dB
+   - Minimum Silence Duration (seconds): Default 0.6s
+   - Padding Duration (seconds): Default 0.05s
+4. Click "Start Processing" to begin
+5. Monitor the progress in real-time
+6. Find your processed video in the selected output folder
 
-## Developer
+## Development
 
-Muzaffer Kadir YILMAZ
+This is an Electron-based application using:
+- Electron
+- FFmpeg for video processing
+- Node.js
+
+## Related Projects
+
+- [Klyppr Web Version](https://github.com/muzafferkadir/klyppr) - The web-based version of Klyppr
 
 ## License
 
-MIT
+MIT License 
