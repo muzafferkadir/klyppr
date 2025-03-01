@@ -7,7 +7,7 @@ A web-based tool for detecting and trimming silent parts in videos using FFmpeg.
 The desktop version of Klyppr is now available with 15x faster processing! Download it for free:
 
 -  [Windows](https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-Portable-x64.exe)
--  [Mac](https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-1.0.0-arm64.dmg)
+-  [Mac](https://github.com/muzafferkadir/klyppr-desktop/releases/download/v1.1.0/Klyppr-1.1.0-arm64.dmg)
 - 📦 [Source Code](https://github.com/muzafferkadir/klyppr-desktop)
 
 The desktop version offers:
