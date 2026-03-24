@@ -13,7 +13,7 @@
     "@ffmpeg/core-mt": "^0.12.6",
     "@ffmpeg/ffmpeg": "^0.12.7",
     "@ffmpeg/util": "^0.12.1",
-    "next": "14.0.4",
+    "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18"
   },
