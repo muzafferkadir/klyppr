@@ -2,40 +2,130 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================================
+   Klyppr web — native macOS look, aligned with the desktop app.
+   Dark grouped surfaces, indigo accent (#6366f1), SF Pro typography.
+   ============================================================================ */
+
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 17, 24, 39;
-  --background-end-rgb: 17, 24, 39;
+  color-scheme: dark;
+
+  --window: #1c1c1e;
+  --window-2: rgba(255, 255, 255, 0.04);
+  --group: rgba(255, 255, 255, 0.055);
+  --group-hover: rgba(255, 255, 255, 0.09);
+  --field: rgba(0, 0, 0, 0.22);
+
+  --separator: rgba(255, 255, 255, 0.09);
+  --border: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --text: rgba(255, 255, 255, 0.92);
+  --text-2: rgba(255, 255, 255, 0.55);
+  --text-3: rgba(255, 255, 255, 0.34);
+
+  --accent: #6366f1;
+
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'SF Mono', 'Menlo', 'JetBrains Mono', monospace;
 }
 
 html {
-  background-color: rgb(var(--background-start-rgb));
+  background-color: var(--window);
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-    to bottom,
-    rgb(var(--background-start-rgb)),
-    rgb(var(--background-end-rgb))
-  );
+  font-family: var(--font);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Fixed full-page background fade (kept, retuned to macOS dark) */
+  background:
+    radial-gradient(1100px 520px at 50% -8%, rgba(255, 255, 255, 0.045), transparent 60%),
+    linear-gradient(to bottom, #202023, #161618);
+  background-attachment: fixed;
 }
 
-/* Custom scrollbar */
+/* ---------- Range sliders (native-style indigo control) ---------- */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.10);
+  cursor: pointer;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  transition: box-shadow 0.12s ease;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: transparent;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.10);
+}
+
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
+}
+
+/* ---------- Focus rings (accent, matches desktop) ---------- */
+button:focus-visible,
+a:focus-visible,
+label:focus-within {
+  outline: 2px solid rgba(99, 102, 241, 0.7);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- Custom scrollbar (macOS-style) ---------- */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1f2937;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4b5563;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+  background: rgba(255, 255, 255, 0.3);
+  background-clip: padding-box;
 }
