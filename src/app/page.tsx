@@ -65,6 +65,82 @@ const DesktopAppAnnouncement = ({ lang }: { lang: 'tr' | 'en' }) => {
   );
 };
 
+const INSTALL_CMDS = {
+  mac: 'curl -fsSL https://raw.githubusercontent.com/muzafferkadir/klyppr-desktop/main/install.sh | bash',
+  win: 'irm https://raw.githubusercontent.com/muzafferkadir/klyppr-desktop/main/install.ps1 | iex',
+};
+
+const DesktopInstall = ({ lang }: { lang: 'tr' | 'en' }) => {
+  const tr = lang === 'tr';
+  const [os, setOs] = useState<'mac' | 'win'>('mac');
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && navigator.userAgent.includes('Windows')) setOs('win');
+  }, []);
+
+  const cmd = INSTALL_CMDS[os];
+
+  return (
+    <div className="bg-surface border border-stroke rounded-group p-4 sm:p-5">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] text-ink-3">
+          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
+          </svg>
+          {tr ? 'Masaüstü Uygulaması · 15x Daha Hızlı' : 'Desktop App · 15x Faster'}
+        </h2>
+        <div className="flex gap-1 rounded-full bg-field p-0.5">
+          {(['mac', 'win'] as const).map((o) => (
+            <button
+              key={o}
+              onClick={() => setOs(o)}
+              className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                os === o ? 'bg-accent text-white' : 'text-ink-2 hover:text-ink'
+              }`}
+            >
+              {o === 'mac' ? '🍎 macOS' : '🪟 Windows'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3 overflow-x-auto rounded-field border border-stroke bg-field px-3.5 py-3">
+        <span className="select-none font-mono text-accent">{os === 'mac' ? '$' : '>'}</span>
+        <code className="whitespace-nowrap font-mono text-[13px] text-ink">{cmd}</code>
+        <button
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(cmd);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1500);
+            } catch {}
+          }}
+          className={`ml-auto flex-shrink-0 rounded-lg px-3.5 py-1.5 text-[13px] font-semibold text-white transition-colors ${
+            copied ? 'bg-success' : 'bg-accent hover:bg-accent-hover'
+          }`}
+        >
+          {copied ? (tr ? 'Kopyalandı!' : 'Copied!') : tr ? 'Kopyala' : 'Copy'}
+        </button>
+      </div>
+
+      <p className="mt-2.5 text-[12.5px] text-ink-3">
+        {os === 'mac'
+          ? tr
+            ? 'Terminal’i aç, komutu yapıştır. Apple Silicon & Intel — Gatekeeper uyarısı çıkmaz.'
+            : 'Open Terminal, paste the command. Apple Silicon & Intel — no Gatekeeper prompt.'
+          : tr
+            ? 'PowerShell’i aç, komutu yapıştır. En son imzalı kurulumu indirir.'
+            : 'Open PowerShell, paste the command. Downloads the latest signed installer.'}
+        {' · '}
+        <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/latest" className="text-accent hover:underline">
+          {tr ? 'elle indir' : 'download manually'}
+        </a>
+      </p>
+    </div>
+  );
+};
+
 export default function Home() {
   const [video, setVideo] = useState<File | null>(null);
   const [silentSegments, setSilentSegments] = useState<{ start: number; end: number }[]>([]);
@@ -631,6 +707,8 @@ export default function Home() {
               <span className="text-xs sm:text-sm font-normal text-ink-2">Automatic Video Silence Clipper</span>
             </span>
           </h1>
+
+          <DesktopInstall lang={lang} />
 
           {/* Main Content */}
           <div className="space-y-4 sm:space-y-6">
