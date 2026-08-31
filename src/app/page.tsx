@@ -99,7 +99,7 @@ const DesktopInstall = ({ lang }: { lang: 'tr' | 'en' }) => {
                 os === o ? 'bg-accent text-white' : 'text-ink-2 hover:text-ink'
               }`}
             >
-              {o === 'mac' ? '🍎 macOS' : '🪟 Windows'}
+              {o === 'mac' ? 'macOS' : 'Windows'}
             </button>
           ))}
         </div>
