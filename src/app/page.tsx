@@ -37,9 +37,9 @@ const DesktopAppAnnouncement = ({ lang }: { lang: 'tr' | 'en' }) => {
       {/* Download links */}
       <span className="text-[12px] text-ink-2 sm:text-sm">
         <span className="hidden sm:inline">{tr ? 'İndir: ' : 'Get it: '}</span>
-        <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/latest/download/Klyppr-mac-arm64.dmg" className="font-semibold text-accent underline underline-offset-2 hover:text-accent-hover">Mac</a>
+        <a href="/download" className="font-semibold text-accent underline underline-offset-2 hover:text-accent-hover">Mac</a>
         <span className="mx-1 text-ink-3">·</span>
-        <a href="https://github.com/muzafferkadir/klyppr-desktop/releases/latest/download/Klyppr-Setup-x64.exe" className="font-semibold text-accent underline underline-offset-2 hover:text-accent-hover">Windows</a>
+        <a href="/download" className="font-semibold text-accent underline underline-offset-2 hover:text-accent-hover">Windows</a>
       </span>
 
       {/* GitHub */}
